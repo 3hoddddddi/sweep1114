@@ -27,22 +27,18 @@
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* main wrapper */
+/* main wrapper full height */
 .wrap{
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
   padding:0 12px;
 }
 
 /* page container */
 .page{
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  height:100%;
   width:100%;
   max-width:var(--maxw);
 }
@@ -54,8 +50,11 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:var(--shadow);
   padding:20px 18px;
   overflow:hidden;
-  /* slightly shorter than before */
-  padding-bottom:12px;
+  /* set height to fill screen minus some margin */
+  height: calc(100vh - 24px);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
 /* hero */
@@ -69,10 +68,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
-.quiz{
-  padding:16px 4px 8px;
-  min-height:180px; /* keep consistent height for ending message */
-}
+.quiz{padding:16px 4px 8px; display:flex; flex-direction:column; justify-content:center; flex-grow:1;}
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
 .btn{
@@ -95,13 +91,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
 
-/* pulse animation */
+/* pulse animation for button */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.06);}
 }
 
-/* footer image */
+/* footer visual */
 .footer-visual{
   width:100%;
   margin:0;
@@ -115,6 +111,18 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   object-fit:contain;
   transform: scale(0.8);
   transform-origin: center top;
+}
+
+/* expired message match original quiz height */
+.expired{
+  flex-grow:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  min-height:180px;
 }
 
 /* responsive tweaks */
@@ -148,7 +156,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
         </p>
       </header>
 
-      <section class="quiz" aria-live="polite" aria-atomic="true">
+      <section id="quiz-section" class="quiz" aria-live="polite" aria-atomic="true">
         <div id="question" class="question">Loading...</div>
         <div id="options" class="options"></div>
       </section>
@@ -182,6 +190,7 @@ var timerId = null;
 var $question = document.getElementById("question");
 var $options = document.getElementById("options");
 var $countdown = document.getElementById("countdown");
+var $quizSection = document.getElementById("quiz-section");
 
 function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
@@ -207,6 +216,7 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
+  $quizSection.classList.remove("expired");
   item.options.forEach(function(label){
     var btn = document.createElement("button");
     btn.className="btn";
@@ -232,10 +242,7 @@ function onChoose(item){
 }
 
 function onExpire(){
-  // make ending message occupy same space as quiz
-  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $question.style.minHeight = "180px"; // same as quiz min-height
-  $options.innerHTML="";
+  $quizSection.innerHTML = '<div class="expired">This round is closed.<br>Stay tuned for what’s next.</div>';
 }
 
 render();
