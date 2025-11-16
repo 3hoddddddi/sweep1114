@@ -23,11 +23,40 @@
 }
 
 /* reset */
-*{box-sizing:border-box}
-html,body{height:100%; margin:0; font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; background:linear-gradient(#fff,var(--bg)); color:var(--ink);}
-.wrap{min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:16px 12px 24px;}
-.page{width:100%;max-width:var(--maxw);}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 18px;overflow:hidden;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
+
+/* main wrapper full height */
+.wrap{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 12px;
+}
+
+/* page container */
+.page{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  height:100%;
+  width:100%;
+  max-width:var(--maxw);
+}
+
+/* card */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 18px;
+  overflow:hidden;
+}
+
+/* hero */
 .hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
@@ -36,25 +65,52 @@ html,body{height:100%; margin:0; font-family:"Montserrat",system-ui,-apple-syste
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
+
+/* quiz */
 .quiz{padding:16px 4px 8px;}
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
-.btn{appearance:none;border:none;border-radius:12px;padding:14px 16px;background:var(--brand);color:#111;font-weight:700;font-size:16px;line-height:1.2;cursor:pointer;box-shadow:0 4px 14px rgba(255,153,0,.25);transition:transform .1s,box-shadow .2s,background .2s,opacity .2s; animation:btnPulse 1.6s infinite alternate;}
+.btn{
+  appearance:none;
+  border:none;
+  border-radius:12px;
+  padding:14px 16px;
+  background:var(--brand);
+  color:#111;
+  font-weight:700;
+  font-size:16px;
+  line-height:1.2;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(255,153,0,.25);
+  transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
+  animation: pulse 1.2s ease-in-out infinite;
+}
 .btn:active{transform:translateY(1px);}
 .btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
-.footer-visual{margin:14px 0 0;border-radius:12px;overflow:hidden;background:#fff;border:0;}
-.footer-visual img{display:block;width:100%;height:auto;}
 
-/* pulse animation for buttons */
-@keyframes btnPulse{
-  0%{transform:scale(1); box-shadow:0 4px 14px rgba(255,153,0,.25);}
-  50%{transform:scale(1.05); box-shadow:0 8px 24px rgba(255,153,0,.45);}
-  100%{transform:scale(1); box-shadow:0 4px 14px rgba(255,153,0,.25);}
+/* pulse animation for button */
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.06);}
 }
 
-/* responsive text */
+/* footer visual */
+.footer-visual{
+  width:100%;
+  margin:0;
+  border-radius:12px;
+  overflow:hidden;
+}
+.footer-visual img{
+  display:block;
+  width:100%;
+  max-height:30vh;
+  object-fit:contain;
+}
+
+/* responsive tweaks */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -68,33 +124,35 @@ html,body{height:100%; margin:0; font-family:"Montserrat",system-ui,-apple-syste
 <noscript>JavaScript is required for this page to work.</noscript>
 
 <div class="wrap">
-<main class="page" role="main" aria-labelledby="headline">
-<section class="card">
+  <main class="page" role="main" aria-labelledby="headline">
 
-<header class="hero">
-  <h1 id="headline" class="headline">
-    <span class="line1">You've been selected for a chance to</span>
-    <span class="line2"><strong class="highlight">win!</strong></span>
-  </h1>
-  <div class="amount">-$100-</div>
-  <div class="subhead">Amazon Gift Card!</div>
-  <p class="timer">
-    Limited time - don't miss out!
-    <span class="count">Offer ends in <strong id="countdown">05:00</strong></span>
-  </p>
-</header>
+    <section class="card">
 
-<section class="quiz" aria-live="polite" aria-atomic="true">
-  <div id="question" class="question">Loading...</div>
-  <div id="options" class="options"></div>
-</section>
+      <header class="hero">
+        <h1 id="headline" class="headline">
+          <span class="line1">You've been selected for a chance to</span>
+          <span class="line2"><strong class="highlight">win!</strong></span>
+        </h1>
+        <div class="amount">-$100-</div>
+        <div class="subhead">Amazon Gift Card!</div>
+        <p class="timer">
+          Limited time - don't miss out!
+          <span class="count">Offer ends in <strong id="countdown">05:00</strong></span>
+        </p>
+      </header>
 
-<figure class="footer-visual">
-  <img src="bottom.png" alt="Promotional banner">
-</figure>
+      <section class="quiz" aria-live="polite" aria-atomic="true">
+        <div id="question" class="question">Loading...</div>
+        <div id="options" class="options"></div>
+      </section>
 
-</section>
-</main>
+      <figure class="footer-visual">
+        <img src="bottom.png" alt="Promotional banner">
+      </figure>
+
+    </section>
+
+  </main>
 </div>
 
 <script>
@@ -105,9 +163,9 @@ var COUNTDOWN_SECONDS = 300;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
-  { q: "How often do you shop on Amazon?", options: ["Every week","About once a month","Rarely"] },
-  { q: "When do you usually shop?", options: ["Morning","Afternoon","Evening"], jumpToLast:true },
-  { q: "What would you spend $100 on?", options: ["Snack Time","Spoil My Pets","Treat Myself"] }
+  { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
+  { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"], jumpToLast:true },
+  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"] }
 ];
 
 var current = 0;
@@ -118,16 +176,22 @@ var $question = document.getElementById("question");
 var $options = document.getElementById("options");
 var $countdown = document.getElementById("countdown");
 
-function pad(n){ return n<10 ? ("0"+n) : String(n); }
+function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
 
 function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+
 function startTimer(){
   stopTimer();
   $countdown.textContent = formatTime(countdown);
   timerId = setInterval(function(){
     countdown--;
-    if(countdown <= 0){ stopTimer(); $countdown.textContent="00:00"; onExpire(); return; }
+    if(countdown<=0){
+      stopTimer();
+      $countdown.textContent="00:00";
+      onExpire();
+      return;
+    }
     $countdown.textContent = formatTime(countdown);
   },1000);
 }
@@ -138,30 +202,36 @@ function render(){
   $options.innerHTML = "";
   item.options.forEach(function(label){
     var btn = document.createElement("button");
-    btn.className = "btn";
-    btn.type = "button";
-    btn.textContent = label;
-    btn.addEventListener("click", function(){
-      onChoose(item);
-    });
+    btn.className="btn";
+    btn.type="button";
+    btn.textContent=label;
+    btn.addEventListener("click",function(){ onChoose(item); });
     $options.appendChild(btn);
   });
 }
 
 function onChoose(item){
-  if(item.jumpToLast){ current = quiz.length-1; render(); return; }
-  if(current === quiz.length-1){ window.location.href = REDIRECT_URL; return; }
+  if(item.jumpToLast){
+    current = quiz.length-1;
+    render();
+    return;
+  }
+  if(current === quiz.length-1){
+    window.location.href = REDIRECT_URL;
+    return;
+  }
   current++;
   render();
 }
 
 function onExpire(){
-  $question.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
-  $options.innerHTML = "";
+  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+  $options.innerHTML="";
 }
 
 render();
 startTimer();
+
 })();
 </script>
 
