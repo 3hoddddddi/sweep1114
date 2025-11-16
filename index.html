@@ -22,16 +22,17 @@
   --maxw:460px;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
+/* reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* page layout */
+/* page layout - flex full screen */
 .wrap {
   display:flex;
   flex-direction:column;
   min-height:100vh;
-  padding:16px 12px 12px;
+  padding:12px 12px 12px; /* slightly reduce top padding to move card up */
   align-items:center;
 }
 
@@ -48,22 +49,21 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px 18px;
+  padding:18px 16px; /* slightly smaller padding for tighter layout */
   display:flex;
   flex-direction:column;
   flex-grow:1;
-  justify-content:flex-start; /* slight upward shift */
   overflow:hidden;
 }
 
 /* hero */
-.hero{text-align:center;padding:2px 4px 12px;border-bottom:1px solid #eef1f4;}
+.hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
 .headline .highlight{display:inline-block;padding:4px 10px;background:var(--brand);color:#fff;border-radius:999px;font-size:26px;font-weight:800;box-shadow:0 4px 14px rgba(255,153,0,.25);}
 .amount{margin:6px 0 2px;font-weight:800;color:var(--brand);font-size:28px;letter-spacing:1px;}
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
-.timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
+.timer{margin:6px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
@@ -96,7 +96,7 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
 
-/* pulse animation */
+/* pulse animation for button */
 @keyframes pulse {
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.05);}
@@ -113,7 +113,7 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 .footer-visual img{
   display:block;
   width:100%;
-  max-height:28vh; /* fixed smaller height for all phones */
+  max-height:22vh; /* slightly smaller to fit all phones */
   object-fit:contain;
 }
 
@@ -182,13 +182,31 @@ function pad(n){ return n<10?"0"+n:String(n);}
 function formatTime(s){ var m=Math.floor(s/60),sec=s%60; return pad(m)+":"+pad(sec);}
 
 function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;}}
-function startTimer(){stopTimer();$countdown.textContent=formatTime(countdown);timerId=setInterval(function(){countdown--; if(countdown<=0){stopTimer();$countdown.textContent="00:00";onExpire();return;} $countdown.textContent=formatTime(countdown);},1000);}
+
+function startTimer(){
+  stopTimer();
+  $countdown.textContent=formatTime(countdown);
+  timerId=setInterval(function(){
+    countdown--;
+    if(countdown<=0){
+      stopTimer();
+      $countdown.textContent="00:00";
+      onExpire();
+      return;
+    }
+    $countdown.textContent=formatTime(countdown);
+  },1000);
+}
 
 function render(){
-  var item=quiz[current]; $question.textContent=item.q; $options.innerHTML="";
+  var item=quiz[current];
+  $question.textContent=item.q;
+  $options.innerHTML="";
   item.options.forEach(function(label){
     var btn=document.createElement("button");
-    btn.className="btn"; btn.type="button"; btn.textContent=label;
+    btn.className="btn";
+    btn.type="button";
+    btn.textContent=label;
     btn.addEventListener("click",function(){onChoose(item);});
     $options.appendChild(btn);
   });
@@ -200,7 +218,10 @@ function onChoose(item){
   current++; render();
 }
 
-function onExpire(){ $question.innerHTML="This round is closed.<br>Stay tuned for what’s next."; $options.innerHTML=""; }
+function onExpire(){
+  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+  $options.innerHTML="";
+}
 
 render();
 startTimer();
