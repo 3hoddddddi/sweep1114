@@ -27,23 +27,24 @@
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* wrapper */
+/* main wrapper */
 .wrap{
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:center;
+  justify-content:space-between;
   align-items:center;
   padding:0 12px;
 }
 
 /* page container */
 .page{
-  width:100%;
-  max-width:var(--maxw);
   display:flex;
   flex-direction:column;
-  justify-content:flex-start;
+  justify-content:space-between;
+  height:100%;
+  width:100%;
+  max-width:var(--maxw);
 }
 
 /* card */
@@ -52,12 +53,9 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:20px 18px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  min-height:85vh; /* slightly shorter than full screen */
-  max-height:95vh;
   overflow:hidden;
+  /* slightly shorter than before */
+  padding-bottom:12px;
 }
 
 /* hero */
@@ -72,9 +70,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 
 /* quiz */
 .quiz{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
   padding:16px 4px 8px;
   min-height:180px; /* keep consistent height for ending message */
 }
@@ -108,19 +103,21 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 
 /* footer image */
 .footer-visual{
-  flex-shrink:0;
-  margin-top:12px;
+  width:100%;
+  margin:0;
   border-radius:12px;
   overflow:hidden;
 }
 .footer-visual img{
   display:block;
   width:100%;
-  max-height:24vh; /* reduced image size to fit all screens */
+  max-height:30vh;
   object-fit:contain;
+  transform: scale(0.8);
+  transform-origin: center top;
 }
 
-/* responsive text */
+/* responsive tweaks */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -235,12 +232,15 @@ function onChoose(item){
 }
 
 function onExpire(){
+  // make ending message occupy same space as quiz
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+  $question.style.minHeight = "180px"; // same as quiz min-height
   $options.innerHTML="";
 }
 
 render();
 startTimer();
+
 })();
 </script>
 
