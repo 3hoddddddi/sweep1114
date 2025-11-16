@@ -113,7 +113,7 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 .footer-visual img{
   display:block;
   width:100%;
-  max-height:25vh; /* fixed smaller height to fit all phones */
+  max-height:35vh;
   object-fit:contain;
 }
 
@@ -142,8 +142,8 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
         <div class="amount">-$100-</div>
         <div class="subhead">Amazon Gift Card!</div>
         <p class="timer">
-          Don't miss out! Offer ends in
-          <span class="count"> <strong id="countdown">05:00</strong></span>
+          Limited time - don't miss out!
+          <span class="count">Offer ends in <strong id="countdown">05:00</strong></span>
         </p>
       </header>
 
@@ -182,31 +182,13 @@ function pad(n){ return n<10?"0"+n:String(n);}
 function formatTime(s){ var m=Math.floor(s/60),sec=s%60; return pad(m)+":"+pad(sec);}
 
 function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;}}
-
-function startTimer(){
-  stopTimer();
-  $countdown.textContent=formatTime(countdown);
-  timerId=setInterval(function(){
-    countdown--;
-    if(countdown<=0){
-      stopTimer();
-      $countdown.textContent="00:00";
-      onExpire();
-      return;
-    }
-    $countdown.textContent=formatTime(countdown);
-  },1000);
-}
+function startTimer(){stopTimer();$countdown.textContent=formatTime(countdown);timerId=setInterval(function(){countdown--; if(countdown<=0){stopTimer();$countdown.textContent="00:00";onExpire();return;} $countdown.textContent=formatTime(countdown);},1000);}
 
 function render(){
-  var item=quiz[current];
-  $question.textContent=item.q;
-  $options.innerHTML="";
+  var item=quiz[current]; $question.textContent=item.q; $options.innerHTML="";
   item.options.forEach(function(label){
     var btn=document.createElement("button");
-    btn.className="btn";
-    btn.type="button";
-    btn.textContent=label;
+    btn.className="btn"; btn.type="button"; btn.textContent=label;
     btn.addEventListener("click",function(){onChoose(item);});
     $options.appendChild(btn);
   });
@@ -218,10 +200,7 @@ function onChoose(item){
   current++; render();
 }
 
-function onExpire(){
-  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $options.innerHTML="";
-}
+function onExpire(){ $question.innerHTML="This round is closed.<br>Stay tuned for what’s next."; $options.innerHTML=""; }
 
 render();
 startTimer();
