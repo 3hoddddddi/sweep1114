@@ -32,6 +32,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   min-height:100vh;
   display:flex;
   flex-direction:column;
+  justify-content:space-between;
   align-items:center;
   padding:0 12px;
 }
@@ -40,7 +41,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .page{
   display:flex;
   flex-direction:column;
-  align-items:center;
+  justify-content:space-between;
+  height:100%;
   width:100%;
   max-width:var(--maxw);
 }
@@ -50,24 +52,15 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:0; /* remove top and bottom padding */
+  padding:20px 18px;
   overflow:hidden;
-  width:100%;
 }
 
 /* hero */
-.hero{
-  text-align:center;
-  padding:4px 4px 12px; /* internal padding only */
-  border-bottom:1px solid #eef1f4;
-}
+.hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
-.headline .highlight{
-  display:inline-block;padding:4px 10px;background:var(--brand);
-  color:#fff;border-radius:999px;font-size:26px;font-weight:800;
-  box-shadow:0 4px 14px rgba(255,153,0,.25);
-}
+.headline .highlight{display:inline-block;padding:4px 10px;background:var(--brand);color:#fff;border-radius:999px;font-size:26px;font-weight:800;box-shadow:0 4px 14px rgba(255,153,0,.25);}
 .amount{margin:6px 0 2px;font-weight:800;color:var(--brand);font-size:28px;letter-spacing:1px;}
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
@@ -76,7 +69,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* quiz */
 .quiz{
   padding:16px 4px 8px;
-  min-height:180px; 
+  min-height:180px; /* keep consistent height for ending message */
 }
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
@@ -94,20 +87,24 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:0 4px 14px rgba(255,153,0,.25);
   transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
   animation: pulse 1.2s ease-in-out infinite;
+  max-width:100%;
+  box-sizing:border-box;
 }
 .btn:active{transform:translateY(1px);}
 .btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
+
+/* pulse animation */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
-  50%{transform:scale(1.06);}
+  50%{transform:scale(1.03);}
 }
 
 /* footer image */
 .footer-visual{
   width:100%;
-  margin:0; /* remove bottom margin */
+  margin:0;
   border-radius:12px;
   overflow:hidden;
 }
@@ -116,8 +113,9 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   width:100%;
   max-height:30vh;
   object-fit:contain;
-  transform: scale(0.9);
+  transform: scale(0.8);
   transform-origin: center top;
+  margin-top:8px; /* add a little spacing from quiz */
 }
 
 /* responsive tweaks */
@@ -235,6 +233,9 @@ function onChoose(item){
 function onExpire(){
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
   $question.style.minHeight = "180px";
+  $question.style.display = "flex";
+  $question.style.alignItems = "center";
+  $question.style.justifyContent = "center";
   $options.innerHTML="";
 }
 
