@@ -32,7 +32,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:flex-start; /* remove top-bottom centering */
   align-items:center;
   padding:0 12px;
 }
@@ -41,8 +41,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .page{
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
-  height:100%;
+  justify-content:flex-start; /* remove spacing between top and bottom */
+  height:auto; /* auto to shrink to content */
   width:100%;
   max-width:var(--maxw);
 }
@@ -52,12 +52,12 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px 18px;
+  padding:0 18px; /* remove top-bottom padding */
   overflow:hidden;
 }
 
 /* hero */
-.hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
+.hero{text-align:center;padding:12px 4px 12px;border-bottom:1px solid #eef1f4;}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
 .headline .highlight{display:inline-block;padding:4px 10px;background:var(--brand);color:#fff;border-radius:999px;font-size:26px;font-weight:800;box-shadow:0 4px 14px rgba(255,153,0,.25);}
@@ -69,7 +69,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* quiz */
 .quiz{
   padding:16px 4px 8px;
-  min-height:180px; /* keep consistent height for ending message */
+  min-height:180px;
 }
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
@@ -115,7 +115,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   object-fit:contain;
   transform: scale(0.8);
   transform-origin: center top;
-  margin-top:8px; /* add a little spacing from quiz */
+  margin-top:8px; /* spacing from quiz */
+  margin-bottom:0; /* remove bottom spacing */
 }
 
 /* responsive tweaks */
