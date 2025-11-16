@@ -50,7 +50,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px 18px 12px; /* keep bottom slightly shorter */
+  padding:0; /* remove top and bottom padding */
   overflow:hidden;
   width:100%;
 }
@@ -58,7 +58,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* hero */
 .hero{
   text-align:center;
-  padding:4px 4px 12px;
+  padding:4px 4px 12px; /* internal padding only */
   border-bottom:1px solid #eef1f4;
 }
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
@@ -107,7 +107,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* footer image */
 .footer-visual{
   width:100%;
-  margin:12px 0 4px; /* bottom margin reduced to 1/3 */
+  margin:0; /* remove bottom margin */
   border-radius:12px;
   overflow:hidden;
 }
@@ -116,7 +116,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   width:100%;
   max-height:30vh;
   object-fit:contain;
-  transform: scale(0.9); /* slightly bigger than before */
+  transform: scale(0.9);
   transform-origin: center top;
 }
 
