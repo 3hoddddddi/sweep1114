@@ -27,24 +27,23 @@
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* main wrapper full height */
+/* wrapper */
 .wrap{
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:center;
   align-items:center;
   padding:0 12px;
 }
 
 /* page container */
 .page{
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  height:100%;
   width:100%;
   max-width:var(--maxw);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
 }
 
 /* card */
@@ -53,6 +52,11 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:20px 18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:85vh; /* slightly shorter than full screen */
+  max-height:95vh;
   overflow:hidden;
 }
 
@@ -67,7 +71,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
-.quiz{padding:16px 4px 8px;}
+.quiz{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:16px 4px 8px;
+  min-height:180px; /* keep consistent height for ending message */
+}
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
 .btn{
@@ -90,29 +100,27 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
 
-/* pulse animation for button */
+/* pulse animation */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.06);}
 }
 
-/* footer visual */
+/* footer image */
 .footer-visual{
-  width:100%;
-  margin:0;
+  flex-shrink:0;
+  margin-top:12px;
   border-radius:12px;
   overflow:hidden;
 }
 .footer-visual img{
   display:block;
   width:100%;
-  max-height:30vh;
+  max-height:24vh; /* reduced image size to fit all screens */
   object-fit:contain;
-  transform: scale(0.8);
-  transform-origin: center top;
 }
 
-/* responsive tweaks */
+/* responsive text */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -233,7 +241,6 @@ function onExpire(){
 
 render();
 startTimer();
-
 })();
 </script>
 
