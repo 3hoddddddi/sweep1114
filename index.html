@@ -27,12 +27,11 @@
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* main wrapper full height */
+/* main wrapper */
 .wrap{
   min-height:100vh;
   display:flex;
   flex-direction:column;
-  justify-content:center;
   align-items:center;
   padding:0 12px;
 }
@@ -50,11 +49,9 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:var(--shadow);
   padding:20px 18px;
   overflow:hidden;
-  /* set height to fill screen minus some margin */
-  height: calc(100vh - 24px);
+  min-height:calc(100vh - 24px);
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
 }
 
 /* hero */
@@ -68,8 +65,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
-.quiz{padding:16px 4px 8px; display:flex; flex-direction:column; justify-content:center; flex-grow:1;}
-.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
+.quiz{padding:16px 4px 8px;flex:0 0 auto; min-height:140px;}
+.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center; min-height:60px;}
 .options{display:grid;gap:10px;}
 .btn{
   appearance:none;
@@ -100,29 +97,18 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* footer visual */
 .footer-visual{
   width:100%;
-  margin:0;
+  margin-top:auto;
   border-radius:12px;
   overflow:hidden;
+  flex-shrink:0;
 }
 .footer-visual img{
   display:block;
   width:100%;
   max-height:30vh;
   object-fit:contain;
-  transform: scale(0.8);
-  transform-origin: center top;
-}
-
-/* expired message match original quiz height */
-.expired{
-  flex-grow:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  min-height:180px;
+  transform:scale(0.8);
+  transform-origin:center top;
 }
 
 /* responsive tweaks */
@@ -156,7 +142,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
         </p>
       </header>
 
-      <section id="quiz-section" class="quiz" aria-live="polite" aria-atomic="true">
+      <section class="quiz" aria-live="polite" aria-atomic="true">
         <div id="question" class="question">Loading...</div>
         <div id="options" class="options"></div>
       </section>
@@ -190,7 +176,6 @@ var timerId = null;
 var $question = document.getElementById("question");
 var $options = document.getElementById("options");
 var $countdown = document.getElementById("countdown");
-var $quizSection = document.getElementById("quiz-section");
 
 function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
@@ -216,14 +201,13 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
-  $quizSection.classList.remove("expired");
   item.options.forEach(function(label){
     var btn = document.createElement("button");
     btn.className="btn";
     btn.type="button";
     btn.textContent=label;
-    btn.addEventListener("click",function(){ onChoose(item); });
     $options.appendChild(btn);
+    btn.addEventListener("click",function(){ onChoose(item); });
   });
 }
 
@@ -242,7 +226,9 @@ function onChoose(item){
 }
 
 function onExpire(){
-  $quizSection.innerHTML = '<div class="expired">This round is closed.<br>Stay tuned for what’s next.</div>';
+  $question.classList.add("expired");
+  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+  $options.innerHTML="<div style='height:72px;'></div>"; // match previous quiz button area
 }
 
 render();
