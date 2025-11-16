@@ -30,9 +30,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* main wrapper */
 .wrap{
   min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display:block; /* 方案2，不用flex */
   padding:0 12px;
 }
 
@@ -40,6 +38,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .page{
   width:100%;
   max-width:var(--maxw);
+  margin:0 auto;
 }
 
 /* card */
@@ -47,11 +46,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:20px 18px;
+  padding:20px 18px 12px; /* 略微缩短底部 */
   overflow:hidden;
-  min-height:calc(100vh - 24px);
-  display:flex;
-  flex-direction:column;
 }
 
 /* hero */
@@ -65,8 +61,11 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
-.quiz{padding:16px 4px 8px;flex:0 0 auto; min-height:140px;}
-.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center; min-height:60px;}
+.quiz{
+  padding:16px 4px 8px;
+  min-height:180px;
+}
+.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
 .btn{
   appearance:none;
@@ -88,27 +87,26 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
 
-/* pulse animation for button */
+/* pulse animation */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.06);}
 }
 
-/* footer visual */
+/* footer image */
 .footer-visual{
   width:100%;
-  margin-top:auto;
+  margin:0;
   border-radius:12px;
   overflow:hidden;
-  flex-shrink:0;
 }
 .footer-visual img{
   display:block;
   width:100%;
   max-height:30vh;
   object-fit:contain;
-  transform:scale(0.8);
-  transform-origin:center top;
+  transform: scale(0.8);
+  transform-origin: center top;
 }
 
 /* responsive tweaks */
@@ -206,8 +204,8 @@ function render(){
     btn.className="btn";
     btn.type="button";
     btn.textContent=label;
-    $options.appendChild(btn);
     btn.addEventListener("click",function(){ onChoose(item); });
+    $options.appendChild(btn);
   });
 }
 
@@ -226,9 +224,12 @@ function onChoose(item){
 }
 
 function onExpire(){
-  $question.classList.add("expired");
-  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $options.innerHTML="<div style='height:72px;'></div>"; // match previous quiz button area
+  $question.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
+  $options.innerHTML = "";
+  // 调整上下间距，使结束文案位于原按钮中间区域
+  $question.style.minHeight = "auto";
+  $question.style.marginTop = "50px";   // 可微调，让文案下移
+  $question.style.marginBottom = "20px"; 
 }
 
 render();
