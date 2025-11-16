@@ -50,7 +50,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:0; /* remove top and bottom padding */
+  padding:0; 
   overflow:hidden;
   width:100%;
 }
@@ -58,7 +58,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 /* hero */
 .hero{
   text-align:center;
-  padding:4px 4px 12px; /* internal padding only */
+  padding:4px 4px 12px; 
   border-bottom:1px solid #eef1f4;
 }
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
@@ -77,9 +77,16 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .quiz{
   padding:16px 4px 8px;
   min-height:180px; 
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start; /* normal state */
 }
-.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
-.options{display:grid;gap:10px;}
+.question{
+  font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;
+}
+.options{
+  display:grid;gap:10px;
+}
 .btn{
   appearance:none;
   border:none;
@@ -94,6 +101,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:0 4px 14px rgba(255,153,0,.25);
   transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
   animation: pulse 1.2s ease-in-out infinite;
+  max-width:100%; /* 防止溢出屏幕 */
+  box-sizing:border-box;
 }
 .btn:active{transform:translateY(1px);}
 .btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
@@ -101,13 +110,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .btn--muted{background:#ffd28a;}
 @keyframes pulse{
   0%,100%{transform:scale(1);}
-  50%{transform:scale(1.06);}
+  50%{transform:scale(1.03);} /* 缩小放大幅度，减少溢出 */
 }
 
 /* footer image */
 .footer-visual{
   width:100%;
-  margin:0; /* remove bottom margin */
+  margin:0; 
   border-radius:12px;
   overflow:hidden;
 }
@@ -182,6 +191,7 @@ var timerId = null;
 
 var $question = document.getElementById("question");
 var $options = document.getElementById("options");
+var $quizSection = document.querySelector(".quiz");
 var $countdown = document.getElementById("countdown");
 
 function pad(n){ return n<10?("0"+n):String(n); }
@@ -234,7 +244,12 @@ function onChoose(item){
 
 function onExpire(){
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $question.style.minHeight = "180px";
+  $question.style.minHeight = "0"; // remove quiz min-height
+  // center the text vertically in quiz section
+  $quizSection.style.display = "flex";
+  $quizSection.style.flexDirection = "column";
+  $quizSection.style.justifyContent = "center";
+  $quizSection.style.alignItems = "center";
   $options.innerHTML="";
 }
 
