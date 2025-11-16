@@ -22,36 +22,41 @@
   --maxw:460px;
 }
 
+/* reset */
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;}
+html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
+/* main wrapper */
 .wrap{
   min-height:100vh;
   display:flex;
   flex-direction:column;
+  justify-content:space-between;
   align-items:center;
   padding:0 12px;
 }
 
+/* page container */
 .page{
   display:flex;
   flex-direction:column;
+  justify-content:space-between;
   height:100%;
   width:100%;
   max-width:var(--maxw);
 }
 
+/* card */
 .card{
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  display:flex;
-  flex-direction:column;
-  padding:20px 18px 4px; /* top preserved, bottom reduced to ~1/3 */
+  padding:20px 18px 4px; /* bottom padding reduced to 1/3 */
   overflow:hidden;
 }
 
+/* hero */
 .hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
@@ -61,9 +66,10 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
 
+/* quiz */
 .quiz{
   padding:16px 4px 8px;
-  min-height:180px;
+  min-height:180px; /* keep consistent height for ending message */
 }
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
@@ -86,14 +92,17 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
 .btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 .btn--muted{background:#ffd28a;}
+
+/* pulse animation */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.06);}
 }
 
+/* footer image */
 .footer-visual{
   width:100%;
-  margin-top:12px;
+  margin:0;
   border-radius:12px;
   overflow:hidden;
 }
@@ -102,11 +111,12 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   width:100%;
   max-height:30vh;
   object-fit:contain;
-  transform: scale(0.9);
+  transform: scale(0.9); /* slightly bigger than 0.8 */
   transform-origin: center top;
-  margin-bottom:4px; /* ~1/3 of original bottom padding */
+  margin-bottom:0; /* remove bottom gap */
 }
 
+/* responsive tweaks */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -117,9 +127,12 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 </head>
 
 <body>
+<noscript>JavaScript is required for this page to work.</noscript>
+
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
     <section class="card">
+
       <header class="hero">
         <h1 id="headline" class="headline">
           <span class="line1">You've been selected for a chance to</span>
@@ -141,6 +154,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
       <figure class="footer-visual">
         <img src="bottom.png" alt="Promotional banner">
       </figure>
+
     </section>
   </main>
 </div>
@@ -215,14 +229,18 @@ function onChoose(item){
 }
 
 function onExpire(){
+  // move ending message to middle of quiz area
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $question.style.minHeight = "180px";
+  $question.style.minHeight = "180px"; 
+  $question.style.margin = "40px 0"; // pushes message down into middle of quiz
   $options.innerHTML="";
 }
 
 render();
 startTimer();
+
 })();
 </script>
+
 </body>
 </html>
