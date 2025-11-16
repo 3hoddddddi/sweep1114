@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --brand:#ff9900;
   --brand-dark:#232f3e;
   --ink:#111;
@@ -25,34 +25,34 @@
 /* reset */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
+body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
 
-/* page layout - flex full screen */
-.wrap {
+/* main wrapper full height */
+.wrap{
+  min-height:100vh;
   display:flex;
   flex-direction:column;
-  min-height:100vh;
-  padding:16px 12px 12px;
+  justify-content:space-between;
   align-items:center;
+  padding:0 12px;
 }
 
-.page {
-  width:100%;
-  max-width:var(--maxw);
+/* page container */
+.page{
   display:flex;
   flex-direction:column;
-  flex-grow:1;
+  justify-content:space-between;
+  height:100%;
+  width:100%;
+  max-width:var(--maxw);
 }
 
 /* card */
-.card {
+.card{
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:20px 18px;
-  display:flex;
-  flex-direction:column;
-  flex-grow:1;
   overflow:hidden;
 }
 
@@ -67,16 +67,10 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 .timer .count strong{color:var(--brand-dark);}
 
 /* quiz */
-.quiz {
-  flex-grow:1;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  padding:16px 4px 8px;
-}
+.quiz{padding:16px 4px 8px;}
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
-.btn {
+.btn{
   appearance:none;
   border:none;
   border-radius:12px;
@@ -88,8 +82,8 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
   line-height:1.2;
   cursor:pointer;
   box-shadow:0 4px 14px rgba(255,153,0,.25);
-  transition:transform .2s,box-shadow .2s;
-  animation:pulse 1.2s infinite;
+  transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
+  animation: pulse 1.2s ease-in-out infinite;
 }
 .btn:active{transform:translateY(1px);}
 .btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
@@ -97,27 +91,26 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 .btn--muted{background:#ffd28a;}
 
 /* pulse animation for button */
-@keyframes pulse {
+@keyframes pulse{
   0%,100%{transform:scale(1);}
-  50%{transform:scale(1.05);}
+  50%{transform:scale(1.06);}
 }
 
 /* footer visual */
 .footer-visual{
-  flex-shrink:0;
-  margin-top:12px;
+  width:100%;
+  margin:0;
   border-radius:12px;
   overflow:hidden;
-  background:#fff;
 }
 .footer-visual img{
   display:block;
   width:100%;
-  max-height:35vh;
+  max-height:30vh;
   object-fit:contain;
 }
 
-/* responsive text */
+/* responsive tweaks */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -132,6 +125,7 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
 
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
+
     <section class="card">
 
       <header class="hero">
@@ -157,6 +151,7 @@ body{font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helveti
       </figure>
 
     </section>
+
   </main>
 </div>
 
@@ -168,42 +163,75 @@ var COUNTDOWN_SECONDS = 300;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
-  { q: "How often do you shop on Amazon?", options: ["Every week","About once a month","Rarely"] },
-  { q: "When do you usually shop?", options: ["Morning","Afternoon","Evening"], jumpToLast:true },
-  { q: "What would you spend $100 on?", options: ["Snack Time","Spoil My Pets","Treat Myself"] }
+  { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
+  { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"], jumpToLast:true },
+  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"] }
 ];
 
-var current=0, countdown=COUNTDOWN_SECONDS, timerId=null;
-var $question=document.getElementById("question");
-var $options=document.getElementById("options");
-var $countdown=document.getElementById("countdown");
+var current = 0;
+var countdown = COUNTDOWN_SECONDS;
+var timerId = null;
 
-function pad(n){ return n<10?"0"+n:String(n);}
-function formatTime(s){ var m=Math.floor(s/60),sec=s%60; return pad(m)+":"+pad(sec);}
+var $question = document.getElementById("question");
+var $options = document.getElementById("options");
+var $countdown = document.getElementById("countdown");
 
-function stopTimer(){if(timerId){clearInterval(timerId);timerId=null;}}
-function startTimer(){stopTimer();$countdown.textContent=formatTime(countdown);timerId=setInterval(function(){countdown--; if(countdown<=0){stopTimer();$countdown.textContent="00:00";onExpire();return;} $countdown.textContent=formatTime(countdown);},1000);}
+function pad(n){ return n<10?("0"+n):String(n); }
+function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
+
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+
+function startTimer(){
+  stopTimer();
+  $countdown.textContent = formatTime(countdown);
+  timerId = setInterval(function(){
+    countdown--;
+    if(countdown<=0){
+      stopTimer();
+      $countdown.textContent="00:00";
+      onExpire();
+      return;
+    }
+    $countdown.textContent = formatTime(countdown);
+  },1000);
+}
 
 function render(){
-  var item=quiz[current]; $question.textContent=item.q; $options.innerHTML="";
+  var item = quiz[current];
+  $question.textContent = item.q;
+  $options.innerHTML = "";
   item.options.forEach(function(label){
-    var btn=document.createElement("button");
-    btn.className="btn"; btn.type="button"; btn.textContent=label;
-    btn.addEventListener("click",function(){onChoose(item);});
+    var btn = document.createElement("button");
+    btn.className="btn";
+    btn.type="button";
+    btn.textContent=label;
+    btn.addEventListener("click",function(){ onChoose(item); });
     $options.appendChild(btn);
   });
 }
 
 function onChoose(item){
-  if(item.jumpToLast){ current=quiz.length-1; render(); return; }
-  if(current===quiz.length-1){ window.location.href=REDIRECT_URL; return; }
-  current++; render();
+  if(item.jumpToLast){
+    current = quiz.length-1;
+    render();
+    return;
+  }
+  if(current === quiz.length-1){
+    window.location.href = REDIRECT_URL;
+    return;
+  }
+  current++;
+  render();
 }
 
-function onExpire(){ $question.innerHTML="This round is closed.<br>Stay tuned for what’s next."; $options.innerHTML=""; }
+function onExpire(){
+  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+  $options.innerHTML="";
+}
 
 render();
 startTimer();
+
 })();
 </script>
 
