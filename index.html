@@ -96,10 +96,11 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   animation: pulse 1.2s ease-in-out infinite;
   max-width:100%;
 }
-@keyframes pulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.01);}
-}
+.btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
+.btn:active{transform:translateY(1px);}
+.btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
+.btn--muted{background:#ffd28a;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.01);}}
 
 /* footer image */
 .footer-visual{
@@ -126,18 +127,20 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 }
 </style>
 </head>
+
 <body>
 <noscript>JavaScript is required for this page to work.</noscript>
 
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
     <section class="card">
+
       <header class="hero">
-        <h1 id="headline" class="headline">
-          <span class="line1">You've been selected</span>
-          <span class="line1">for a chance to</span>
-          <span class="line2"><strong class="highlight">win!</strong></span>
-        </h1>
+<h1 id="headline" class="headline">
+  <span class="line1">You've been selected</span>
+  <span class="line1">for a chance to</span>
+  <span class="line2"><strong class="highlight">win!</strong></span>
+</h1>
         <div class="amount">-$100-</div>
         <div class="subhead">Amazon Gift Card!</div>
         <p class="timer">
@@ -154,6 +157,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
       <figure class="footer-visual">
         <img src="bottom.png" alt="Promotional banner">
       </figure>
+
     </section>
   </main>
 </div>
@@ -167,8 +171,8 @@ var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
   { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
-  { q: "What's your favorite Amazon shopping time?", options: ["Morning", "Afternoon", "Evening"] },
-  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToFourth:true },
+  { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"], jumpToLast:true },
+  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:true },
   { q: "Submit to enter the $100 Amazon card", options: ["", "Submit & Enter", ""] }
 ];
 
@@ -204,6 +208,25 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
+
+  // Special handling for fourth question: place button in middle slot
+  if(current === 3){
+    for(var i=0;i<3;i++){
+      var btn = document.createElement("button");
+      btn.className="btn";
+      btn.type="button";
+      if(i===1){
+        btn.textContent = item.options[i];
+        btn.addEventListener("click",function(){ window.location.href=REDIRECT_URL; });
+      }else{
+        btn.style.visibility="hidden";
+      }
+      $options.appendChild(btn);
+    }
+    return;
+  }
+
+  // Other questions
   item.options.forEach(function(label){
     var btn = document.createElement("button");
     btn.className="btn";
@@ -215,7 +238,12 @@ function render(){
 }
 
 function onChoose(item){
-  if(item.jumpToFourth){
+  if(item.jumpToLast){
+    current = quiz.length-1;
+    render();
+    return;
+  }
+  if(item.jumpToNext){
     current++;
     render();
     return;
@@ -237,6 +265,7 @@ function onExpire(){
 
 render();
 startTimer();
+
 })();
 </script>
 
