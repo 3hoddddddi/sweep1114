@@ -79,7 +79,10 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   min-height:180px;
 }
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
-.options{display:grid;gap:10px;}
+.options{
+  display:grid;
+  gap:10px;
+}
 .btn{
   appearance:none;
   border:none;
@@ -94,12 +97,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:0 4px 14px rgba(255,153,0,.25);
   transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
   animation: pulse 1.2s ease-in-out infinite;
-
-  /* prevent overflow */
   max-width:100%;
 }
-
-/* FIX #1 — reduce scale */
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.01);}
@@ -130,7 +129,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 }
 </style>
 </head>
-
 <body>
 <noscript>JavaScript is required for this page to work.</noscript>
 
@@ -173,10 +171,10 @@ var COUNTDOWN_SECONDS = 300;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
-  { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
-  { q: "What's your favorite Amazon shopping time?", options: ["Morning", "Afternoon", "Evening"], jumpToNext:true },
-  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:true },
-  { q: "Submit to enter the $100 Amazon card", options: ["","Submit & Enter",""], cta:true }
+  { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"], jumpToNext:1 },
+  { q: "What's your favorite Amazon time?", options: ["Morning", "Afternoon", "Evening"], jumpToNext:2 },
+  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:3 },
+  { q: "Submit to enter the $100 Amazon card", options: [null,"Submit & Enter",null], redirect:true }
 ];
 
 var current = 0;
@@ -191,7 +189,6 @@ function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
 
 function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
-
 function startTimer(){
   stopTimer();
   $countdown.textContent = formatTime(countdown);
@@ -211,32 +208,26 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
-  item.options.forEach(function(label,index){
+  item.options.forEach(function(label){
     var btn = document.createElement("button");
     btn.className="btn";
     btn.type="button";
-    if(label==="") btn.style.visibility="hidden"; // hide first/third in 4th question
-    btn.textContent = label;
-    btn.addEventListener("click",function(){
-      if(item.cta) window.location.href = REDIRECT_URL;
-      else onChoose(item);
-    });
+    if(label){
+      btn.textContent = label;
+      btn.addEventListener("click",function(){
+        if(item.redirect){
+          window.location.href = REDIRECT_URL;
+          return;
+        }
+        current = item.jumpToNext;
+        render();
+      });
+    } else {
+      btn.style.visibility="hidden";
+      btn.disabled=true;
+    }
     $options.appendChild(btn);
   });
-}
-
-function onChoose(item){
-  if(item.jumpToNext){
-    current++;
-    render();
-    return;
-  }
-  if(current === quiz.length-1){
-    window.location.href = REDIRECT_URL;
-    return;
-  }
-  current++;
-  render();
 }
 
 function onExpire(){
@@ -248,7 +239,6 @@ function onExpire(){
 
 render();
 startTimer();
-
 })();
 </script>
 
