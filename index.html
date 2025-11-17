@@ -76,17 +76,23 @@ body{
 
 .quiz{
   padding:16px 4px 8px;
-  min-height:180px;
+  min-height:220px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:center;
 }
 .question{
   font-size:18px;
   font-weight:700;
-  margin-bottom:12px;
+  margin-top:20px;
+  margin-bottom:8px;
   text-align:center;
 }
 .options{
   display:grid;
   gap:10px;
+  width:100%;
   min-height:138px;
 }
 
@@ -104,16 +110,12 @@ body{
   box-shadow:0 4px 14px rgba(255,153,0,.25);
   transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
   animation: pulse 1.2s ease-in-out infinite;
-  max-width:100%;
   height:48px;
 }
-.btn:active{transform:translateY(1px);}
-.btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
-.btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
-@keyframes pulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.01);}
-}
+.btn:active{transform:translateY(1px);} 
+.btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;} 
+.btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);} 
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.01);}}
 
 .footer-visual{
   width:100%;
@@ -177,7 +179,7 @@ body{
 (function(){
 "use strict";
 
-var COUNTDOWN_SECONDS = 10;
+var COUNTDOWN_SECONDS = 5;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
@@ -201,21 +203,13 @@ function formatTime(s){
   return pad(m)+":"+pad(sec);
 }
 
-function stopTimer(){
-  if(timerId){ clearInterval(timerId); timerId=null; }
-}
-
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
 function startTimer(){
   stopTimer();
   cd.textContent = formatTime(countdown);
   timerId = setInterval(function(){
     countdown--;
-    if(countdown<=0){
-      stopTimer();
-      cd.textContent="00:00";
-      onExpire();
-      return;
-    }
+    if(countdown<=0){ stopTimer(); cd.textContent="00:00"; onExpire(); return; }
     cd.textContent = formatTime(countdown);
   },1000);
 }
@@ -229,41 +223,27 @@ function render(){
     var btn = document.createElement("button");
     btn.className="btn";
     btn.type="button";
+
     if(label!==null){
       btn.textContent = label;
       btn.addEventListener("click",function(){ onChoose(item,index); });
     } else {
       btn.style.visibility="hidden";
-      btn.style.height="48px";
     }
+
     optBox.appendChild(btn);
   });
 }
 
 function onChoose(item,index){
-  if(item.jumpTo==="redirect"){
-    window.location.href = REDIRECT_URL;
-    return;
-  }
-  if(item.jumpTo!==null){
-    current = item.jumpTo;
-    render();
-    return;
-  }
-  current++;
-  render();
+  if(item.jumpTo==="redirect"){ window.location.href = REDIRECT_URL; return; }
+  if(item.jumpTo!==null){ current = item.jumpTo; render(); return; }
+  current++; render();
 }
 
 function onExpire(){
   qBox.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
-
-  // make end message appear exactly where the buttons were
-  qBox.style.marginTop = "80px";
-  qBox.style.marginBottom = "10px";
-
-  // keep visual layout identical
   optBox.innerHTML = "";
-  optBox.style.minHeight = "138px";
 }
 
 render();
