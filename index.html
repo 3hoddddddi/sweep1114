@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --brand:#ff9900;
@@ -23,7 +24,12 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
+body{
+  margin:0;
+  font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(#fff,var(--bg));
+}
 .wrap{
   min-height:100vh;
   display:flex;
@@ -54,24 +60,36 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
 .headline .highlight{
-  display:inline-block;padding:4px 10px;background:var(--brand);
-  color:#fff;border-radius:999px;font-size:26px;font-weight:800;
+  display:inline-block;
+  padding:4px 10px;
+  background:var(--brand);
+  color:#fff;
+  border-radius:999px;
+  font-size:26px;
+  font-weight:800;
   box-shadow:0 4px 14px rgba(255,153,0,.25);
 }
 .amount{margin:6px 0 2px;font-weight:800;color:var(--brand);font-size:28px;letter-spacing:1px;}
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
+
 .quiz{
   padding:16px 4px 8px;
   min-height:180px;
 }
-.question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
+.question{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+  text-align:center;
+}
 .options{
   display:grid;
   gap:10px;
   min-height:138px;
 }
+
 .btn{
   appearance:none;
   border:none;
@@ -96,6 +114,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.01);}
 }
+
 .footer-visual{
   width:100%;
   margin:0;
@@ -110,6 +129,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   transform: scale(0.9);
   transform-origin: center top;
 }
+
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -125,12 +145,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
     <section class="card">
+
       <header class="hero">
-<h1 id="headline" class="headline">
-  <span class="line1">You've been selected</span>
-  <span class="line1">for a chance to</span>
-  <span class="line2"><strong class="highlight">win!</strong></span>
-</h1>
+        <h1 id="headline" class="headline">
+          <span class="line1">You've been selected</span>
+          <span class="line1">for a chance to</span>
+          <span class="line2"><strong class="highlight">win!</strong></span>
+        </h1>
         <div class="amount">-$100-</div>
         <div class="subhead">Amazon Gift Card!</div>
         <p class="timer">
@@ -147,6 +168,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
       <figure class="footer-visual">
         <img src="bottom.png" alt="Promotional banner">
       </figure>
+
     </section>
   </main>
 </div>
@@ -169,34 +191,39 @@ var current = 0;
 var countdown = COUNTDOWN_SECONDS;
 var timerId = null;
 
-var $question = document.getElementById("question");
-var $options = document.getElementById("options");
-var $countdown = document.getElementById("countdown");
+var qBox = document.getElementById("question");
+var optBox = document.getElementById("options");
+var cd = document.getElementById("countdown");
 
 function pad(n){ return n<10?("0"+n):String(n); }
-function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
+function formatTime(s){
+  var m = Math.floor(s/60), sec = s%60;
+  return pad(m)+":"+pad(sec);
+}
 
-function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+function stopTimer(){
+  if(timerId){ clearInterval(timerId); timerId=null; }
+}
 
 function startTimer(){
   stopTimer();
-  $countdown.textContent = formatTime(countdown);
+  cd.textContent = formatTime(countdown);
   timerId = setInterval(function(){
     countdown--;
     if(countdown<=0){
       stopTimer();
-      $countdown.textContent="00:00";
+      cd.textContent="00:00";
       onExpire();
       return;
     }
-    $countdown.textContent = formatTime(countdown);
+    cd.textContent = formatTime(countdown);
   },1000);
 }
 
 function render(){
   var item = quiz[current];
-  $question.textContent = item.q;
-  $options.innerHTML = "";
+  qBox.textContent = item.q;
+  optBox.innerHTML = "";
 
   item.options.forEach(function(label,index){
     var btn = document.createElement("button");
@@ -209,7 +236,7 @@ function render(){
       btn.style.visibility="hidden";
       btn.style.height="48px";
     }
-    $options.appendChild(btn);
+    optBox.appendChild(btn);
   });
 }
 
@@ -228,10 +255,8 @@ function onChoose(item,index){
 }
 
 function onExpire(){
-  $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
-  $question.style.marginTop = "30px";
-  $question.style.marginBottom = "05px";
-  $options.innerHTML="";
+  qBox.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
+  optBox.innerHTML = "";
 }
 
 render();
