@@ -78,6 +78,8 @@ body{
   padding:16px 4px 8px;
   display:flex;
   flex-direction:column;
+  flex:1;
+  justify-content:flex-start;
 }
 .question{
   font-size:18px;
@@ -88,7 +90,6 @@ body{
 .options{
   display:grid;
   gap:10px;
-  min-height:138px;
 }
 
 .btn{
@@ -178,7 +179,7 @@ body{
 (function(){
 "use strict";
 
-var COUNTDOWN_SECONDS = 3;
+var COUNTDOWN_SECONDS = 10;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
@@ -227,7 +228,7 @@ function render(){
   qBox.textContent = item.q;
   qBox.style.marginTop = "0";
   qBox.style.marginBottom = "12px";
-  quizSection.style.justifyContent = "flex-start"; // normal question
+  quizSection.style.justifyContent = "flex-start";
   optBox.innerHTML = "";
 
   item.options.forEach(function(label,index){
@@ -260,11 +261,9 @@ function onChoose(item,index){
 }
 
 function onExpire(){
-  // Add empty line before and after for spacing
   qBox.innerHTML = "<br>This round is closed.<br><br>Stay tuned for what’s next.<br>";
   optBox.innerHTML = "";
-  quizSection.style.justifyContent = "center"; // center vertically
-  quizSection.style.minHeight = "auto"; // remove original min-height
+  quizSection.style.justifyContent = "center";
 }
 
 render();
