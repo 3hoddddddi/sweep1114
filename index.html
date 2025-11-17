@@ -21,38 +21,123 @@
   --radius:16px;
   --maxw:460px;
 }
+
+/* reset */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
-.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 12px;}
-.page{display:flex;flex-direction:column;align-items:center;width:100%;max-width:var(--maxw);}
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:0;overflow:hidden;width:100%;}
-.hero{text-align:center;padding:4px 4px 12px;border-bottom:1px solid #eef1f4;}
+
+/* main wrapper */
+.wrap{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0 12px;
+}
+
+/* page container */
+.page{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  max-width:var(--maxw);
+}
+
+/* card */
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:0;
+  overflow:hidden;
+  width:100%;
+}
+
+/* hero */
+.hero{
+  text-align:center;
+  padding:4px 4px 12px;
+  border-bottom:1px solid #eef1f4;
+}
 .headline{margin:4px 0 6px;font-size:22px;line-height:1.25;font-weight:800;}
 .headline .line1{display:block;margin-bottom:6px;}
-.headline .highlight{display:inline-block;padding:4px 10px;background:var(--brand);color:#fff;border-radius:999px;font-size:26px;font-weight:800;box-shadow:0 4px 14px rgba(255,153,0,.25);}
+.headline .highlight{
+  display:inline-block;padding:4px 10px;background:var(--brand);
+  color:#fff;border-radius:999px;font-size:26px;font-weight:800;
+  box-shadow:0 4px 14px rgba(255,153,0,.25);
+}
 .amount{margin:6px 0 2px;font-weight:800;color:var(--brand);font-size:28px;letter-spacing:1px;}
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
-.quiz{padding:16px 4px 8px;min-height:180px;}
+
+/* quiz */
+.quiz{
+  padding:16px 4px 8px;
+  min-height:180px;
+}
 .question{font-size:18px;font-weight:700;margin-bottom:12px;text-align:center;}
 .options{display:grid;gap:10px;}
-.btn{appearance:none;border:none;border-radius:12px;padding:14px 16px;background:var(--brand);color:#111;font-weight:700;font-size:16px;line-height:1.2;cursor:pointer;box-shadow:0 4px 14px rgba(255,153,0,.25);transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;animation: pulse 1.2s ease-in-out infinite;max-width:100%;}
-.btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
-.btn:active{transform:translateY(1px);}
-.btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
-@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.01);}}
-.footer-visual{width:100%;margin:0;border-radius:12px;overflow:hidden;}
-.footer-visual img{display:block;width:100%;max-height:30vh;object-fit:contain;transform: scale(0.9);transform-origin: center top;}
-@media (min-width:480px){.headline{font-size:24px}.headline .highlight{font-size:28px}.amount{font-size:30px}.subhead{font-size:20px}}
+.btn{
+  appearance:none;
+  border:none;
+  border-radius:12px;
+  padding:14px 16px;
+  background:var(--brand);
+  color:#111;
+  font-weight:700;
+  font-size:16px;
+  line-height:1.2;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(255,153,0,.25);
+  transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
+  animation: pulse 1.2s ease-in-out infinite;
+
+  /* prevent overflow */
+  max-width:100%;
+}
+
+/* FIX #1 — reduce scale */
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.01);}
+}
+
+/* footer image */
+.footer-visual{
+  width:100%;
+  margin:0;
+  border-radius:12px;
+  overflow:hidden;
+}
+.footer-visual img{
+  display:block;
+  width:100%;
+  max-height:30vh;
+  object-fit:contain;
+  transform: scale(0.9);
+  transform-origin: center top;
+}
+
+/* responsive tweaks */
+@media (min-width:480px){
+  .headline{font-size:24px}
+  .headline .highlight{font-size:28px}
+  .amount{font-size:30px}
+  .subhead{font-size:20px}
+}
 </style>
 </head>
 
 <body>
+<noscript>JavaScript is required for this page to work.</noscript>
+
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
     <section class="card">
+
       <header class="hero">
 <h1 id="headline" class="headline">
   <span class="line1">You've been selected</span>
@@ -89,9 +174,9 @@ var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
   { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
-  { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"] },
+  { q: "What's your favorite Amazon shopping time?", options: ["Morning", "Afternoon", "Evening"], jumpToNext:true },
   { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:true },
-  { q: "Submit to enter the $100 Amazon card", options: ["Submit & Enter"], fixedMiddle:true }
+  { q: "Submit to enter the $100 Amazon card", options: ["","Submit & Enter",""], cta:true }
 ];
 
 var current = 0;
@@ -126,29 +211,16 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
-
-  if(current === 3){
-    for(var i=0;i<3;i++){
-      var btn = document.createElement("button");
-      btn.className="btn";
-      btn.type="button";
-      if(i===1){
-        btn.textContent = item.options[0];
-        btn.addEventListener("click",function(){ window.location.href=REDIRECT_URL; });
-      } else {
-        btn.style.display="none";
-      }
-      $options.appendChild(btn);
-    }
-    return;
-  }
-
-  item.options.forEach(function(label){
+  item.options.forEach(function(label,index){
     var btn = document.createElement("button");
     btn.className="btn";
     btn.type="button";
-    btn.textContent=label;
-    btn.addEventListener("click",function(){ onChoose(item); });
+    if(label==="") btn.style.visibility="hidden"; // hide first/third in 4th question
+    btn.textContent = label;
+    btn.addEventListener("click",function(){
+      if(item.cta) window.location.href = REDIRECT_URL;
+      else onChoose(item);
+    });
     $options.appendChild(btn);
   });
 }
