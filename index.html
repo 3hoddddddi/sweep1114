@@ -256,7 +256,14 @@ function onChoose(item,index){
 
 function onExpire(){
   qBox.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
+
+  // make end message appear exactly where the buttons were
+  qBox.style.marginTop = "80px";
+  qBox.style.marginBottom = "10px";
+
+  // keep visual layout identical
   optBox.innerHTML = "";
+  optBox.style.minHeight = "138px";
 }
 
 render();
