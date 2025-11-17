@@ -226,7 +226,7 @@ function startTimer(){
 function render(){
   var item = quiz[current];
   qBox.textContent = item.q;
-  qBox.style.marginTop = "0";    // normal question, no extra top
+  qBox.style.marginTop = "0";
   qBox.style.marginBottom = "12px";
   quizSection.style.justifyContent = "flex-start"; // normal question
   optBox.innerHTML = "";
@@ -261,11 +261,10 @@ function onChoose(item,index){
 }
 
 function onExpire(){
-  qBox.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
+  // Add empty line before and after
+  qBox.innerHTML = "<br>This round is closed.<br><br>Stay tuned for what’s next.<br>";
   optBox.innerHTML = "";
-  qBox.style.marginTop = "0";
-  qBox.style.marginBottom = "6px";
-  quizSection.style.justifyContent = "center"; // vertically center for end message
+  quizSection.style.justifyContent = "center"; // center vertically in quiz area
 }
 
 render();
