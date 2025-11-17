@@ -76,7 +76,6 @@ body{
 
 .quiz{
   padding:16px 4px 8px;
-  min-height:180px;
   display:flex;
   flex-direction:column;
 }
@@ -261,10 +260,11 @@ function onChoose(item,index){
 }
 
 function onExpire(){
-  // Add empty line before and after
-  qBox.innerHTML = "<br>This round is closed.<br>Stay tuned for what’s next.";
+  // Add empty line before and after for spacing
+  qBox.innerHTML = "<br>This round is closed.<br><br>Stay tuned for what’s next.<br>";
   optBox.innerHTML = "";
-  quizSection.style.justifyContent = "center"; // center vertically in quiz area
+  quizSection.style.justifyContent = "center"; // center vertically
+  quizSection.style.minHeight = "auto"; // remove original min-height
 }
 
 render();
