@@ -178,7 +178,7 @@ body{
 (function(){
 "use strict";
 
-var COUNTDOWN_SECONDS = 10;
+var COUNTDOWN_SECONDS = 3;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
@@ -261,7 +261,7 @@ function onChoose(item,index){
 
 function onExpire(){
   // Add empty line before and after for spacing
-  qBox.innerHTML = "<br>This round is closed.<br><br>Stay tuned for what’s next.<br>";
+  qBox.innerHTML = "<br>This round is closed.<br>Stay tuned for what’s next.<br>";
   optBox.innerHTML = "";
   quizSection.style.justifyContent = "center"; // center vertically
   quizSection.style.minHeight = "auto"; // remove original min-height
