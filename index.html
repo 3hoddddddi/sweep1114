@@ -176,7 +176,7 @@ var quiz = [
   { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
   { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"], jumpToLast:true },
   { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToFourth:true },
-  { q: "Submit to enter the $100 Amazon card", options: ["","","Submit & Enter"], isFinal:true }
+  { q: "Submit to enter the $100 Amazon card", options: ["Submit & Enter"], isFinal:true }
 ];
 
 var current = 0;
@@ -216,11 +216,7 @@ function render(){
     btn.className="btn";
     btn.type="button";
     btn.textContent=label;
-    if(label!==""){
-      btn.addEventListener("click",function(){ onChoose(item); });
-    } else {
-      btn.style.visibility = "hidden";
-    }
+    btn.addEventListener("click",function(){ onChoose(item); });
     $options.appendChild(btn);
   });
 }
@@ -232,7 +228,7 @@ function onChoose(item){
     return;
   }
   if(item.jumpToFourth){
-    current = 3; // fourth question
+    current = 3; // jump to fourth question
     render();
     return;
   }
