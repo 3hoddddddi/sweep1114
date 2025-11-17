@@ -94,6 +94,8 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   box-shadow:0 4px 14px rgba(255,153,0,.25);
   transition:transform .15s, box-shadow .2s, background .2s, opacity .2s;
   animation: pulse 1.2s ease-in-out infinite;
+
+  /* prevent overflow */
   max-width:100%;
 }
 
@@ -173,8 +175,8 @@ var REDIRECT_URL = "https://www.google.com";
 var quiz = [
   { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"] },
   { q: "When do you usually shop?", options: ["Morning", "Afternoon", "Evening"], jumpToLast:true },
-  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:true },
-  { q: "Submit to enter the $100 Amazon card", options: ["Submit & Enter"] }
+  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToFourth:true },
+  { q: "Submit to enter the $100 Amazon card", options: ["","","Submit & Enter"], isFinal:true }
 ];
 
 var current = 0;
@@ -214,7 +216,11 @@ function render(){
     btn.className="btn";
     btn.type="button";
     btn.textContent=label;
-    btn.addEventListener("click",function(){ onChoose(item); });
+    if(label!==""){
+      btn.addEventListener("click",function(){ onChoose(item); });
+    } else {
+      btn.style.visibility = "hidden";
+    }
     $options.appendChild(btn);
   });
 }
@@ -225,12 +231,12 @@ function onChoose(item){
     render();
     return;
   }
-  if(item.jumpToNext){
-    current++;
+  if(item.jumpToFourth){
+    current = 3; // fourth question
     render();
     return;
   }
-  if(current === quiz.length-1){
+  if(item.isFinal){
     window.location.href = REDIRECT_URL;
     return;
   }
@@ -240,8 +246,10 @@ function onChoose(item){
 
 function onExpire(){
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
+
   $question.style.marginTop = "60px";
   $question.style.marginBottom = "60px";
+
   $options.innerHTML="";
 }
 
