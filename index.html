@@ -77,6 +77,8 @@ body{
 .quiz{
   padding:16px 4px 8px;
   min-height:180px;
+  display:flex;
+  flex-direction:column;
 }
 .question{
   font-size:18px;
@@ -194,6 +196,7 @@ var timerId = null;
 var qBox = document.getElementById("question");
 var optBox = document.getElementById("options");
 var cd = document.getElementById("countdown");
+var quizSection = document.querySelector(".quiz");
 
 function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){
@@ -224,7 +227,8 @@ function render(){
   var item = quiz[current];
   qBox.textContent = item.q;
   qBox.style.marginTop = "0";    // normal question, no extra top
-  qBox.style.marginBottom = "12px"; // normal bottom spacing
+  qBox.style.marginBottom = "12px";
+  quizSection.style.justifyContent = "flex-start"; // normal question
   optBox.innerHTML = "";
 
   item.options.forEach(function(label,index){
@@ -258,9 +262,10 @@ function onChoose(item,index){
 
 function onExpire(){
   qBox.innerHTML = "This round is closed.<br>Stay tuned for what’s next.";
-  qBox.style.marginTop = "0";      // keep same vertical position as normal questions
-  qBox.style.marginBottom = "6px"; // shorter distance to image
   optBox.innerHTML = "";
+  qBox.style.marginTop = "0";
+  qBox.style.marginBottom = "6px";
+  quizSection.style.justifyContent = "center"; // vertically center for end message
 }
 
 render();
