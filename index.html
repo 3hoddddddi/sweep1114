@@ -21,13 +21,9 @@
   --radius:16px;
   --maxw:460px;
 }
-
-/* reset */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:linear-gradient(#fff,var(--bg));}
-
-/* main wrapper */
 .wrap{
   min-height:100vh;
   display:flex;
@@ -35,8 +31,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   align-items:center;
   padding:0 12px;
 }
-
-/* page container */
 .page{
   display:flex;
   flex-direction:column;
@@ -44,8 +38,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   width:100%;
   max-width:var(--maxw);
 }
-
-/* card */
 .card{
   background:var(--card);
   border-radius:var(--radius);
@@ -54,8 +46,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   overflow:hidden;
   width:100%;
 }
-
-/* hero */
 .hero{
   text-align:center;
   padding:4px 4px 12px;
@@ -72,8 +62,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .subhead{font-size:18px;font-weight:700;color:var(--brand-dark);margin-bottom:6px;}
 .timer{margin:8px auto 0;color:var(--muted);font-size:14px;}
 .timer .count strong{color:var(--brand-dark);}
-
-/* quiz */
 .quiz{
   padding:16px 4px 8px;
   min-height:180px;
@@ -82,6 +70,7 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 .options{
   display:grid;
   gap:10px;
+  min-height:138px;
 }
 .btn{
   appearance:none;
@@ -99,12 +88,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   animation: pulse 1.2s ease-in-out infinite;
   max-width:100%;
 }
+.btn:active{transform:translateY(1px);}
+.btn:focus{outline:2px solid rgba(35,47,62,.35);outline-offset:2px;}
+.btn:hover{box-shadow:0 6px 18px rgba(255,153,0,.35);}
 @keyframes pulse{
   0%,100%{transform:scale(1);}
   50%{transform:scale(1.01);}
 }
-
-/* footer image */
 .footer-visual{
   width:100%;
   margin:0;
@@ -119,8 +109,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
   transform: scale(0.9);
   transform-origin: center top;
 }
-
-/* responsive tweaks */
 @media (min-width:480px){
   .headline{font-size:24px}
   .headline .highlight{font-size:28px}
@@ -129,13 +117,13 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
 }
 </style>
 </head>
+
 <body>
 <noscript>JavaScript is required for this page to work.</noscript>
 
 <div class="wrap">
   <main class="page" role="main" aria-labelledby="headline">
     <section class="card">
-
       <header class="hero">
 <h1 id="headline" class="headline">
   <span class="line1">You've been selected</span>
@@ -158,7 +146,6 @@ body{margin:0;font-family:"Montserrat",system-ui,-apple-system,"Segoe UI",Roboto
       <figure class="footer-visual">
         <img src="bottom.png" alt="Promotional banner">
       </figure>
-
     </section>
   </main>
 </div>
@@ -171,10 +158,10 @@ var COUNTDOWN_SECONDS = 300;
 var REDIRECT_URL = "https://www.google.com";
 
 var quiz = [
-  { q: "How often do you shop on Amazon?", options: ["Every week", "About once a month", "Rarely"], jumpToNext:1 },
-  { q: "What's your favorite Amazon time?", options: ["Morning", "Afternoon", "Evening"], jumpToNext:2 },
-  { q: "What would you spend $100 on?", options: ["Snack Time", "Spoil My Pets", "Treat Myself"], jumpToNext:3 },
-  { q: "Submit to enter the $100 Amazon card", options: [null,"Submit & Enter",null], redirect:true }
+  { q: "How often do you shop on Amazon?", options: ["Every week","About once a month","Rarely"], jumpTo:null },
+  { q: "What's your favorite Amazon shopping time?", options: ["Morning","Afternoon","Evening"], jumpTo:null },
+  { q: "What would you spend $100 on?", options: ["Snack Time","Spoil My Pets","Treat Myself"], jumpTo:3 },
+  { q: "Submit to enter the $100 Amazon card", options: [null,"Submit & Enter",null], jumpTo:"redirect" }
 ];
 
 var current = 0;
@@ -189,6 +176,7 @@ function pad(n){ return n<10?("0"+n):String(n); }
 function formatTime(s){ var m=Math.floor(s/60), sec=s%60; return pad(m)+":"+pad(sec); }
 
 function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+
 function startTimer(){
   stopTimer();
   $countdown.textContent = formatTime(countdown);
@@ -208,26 +196,33 @@ function render(){
   var item = quiz[current];
   $question.textContent = item.q;
   $options.innerHTML = "";
-  item.options.forEach(function(label){
+
+  item.options.forEach(function(label,index){
     var btn = document.createElement("button");
     btn.className="btn";
     btn.type="button";
-    if(label){
+    if(label!==null){
       btn.textContent = label;
-      btn.addEventListener("click",function(){
-        if(item.redirect){
-          window.location.href = REDIRECT_URL;
-          return;
-        }
-        current = item.jumpToNext;
-        render();
-      });
+      btn.addEventListener("click",function(){ onChoose(item,index); });
     } else {
       btn.style.visibility="hidden";
-      btn.disabled=true;
     }
     $options.appendChild(btn);
   });
+}
+
+function onChoose(item,index){
+  if(item.jumpTo==="redirect"){
+    window.location.href = REDIRECT_URL;
+    return;
+  }
+  if(item.jumpTo!==null){
+    current = item.jumpTo;
+    render();
+    return;
+  }
+  current++;
+  render();
 }
 
 function onExpire(){
@@ -239,6 +234,7 @@ function onExpire(){
 
 render();
 startTimer();
+
 })();
 </script>
 
