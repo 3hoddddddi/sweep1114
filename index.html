@@ -162,7 +162,7 @@ var quiz = [
   { q: "How often do you shop on Amazon?", options: ["Every week","About once a month","Rarely"], jumpTo:null },
   { q: "When do you usually shop?", options: ["Morning","Afternoon","Evening"], jumpTo:null },
   { q: "What would you spend $100 on?", options: ["Snack Time","Spoil My Pets","Treat Myself"], jumpTo:3 },
-  { q: "Try your luck at a $100 Amazon card", options: [null,"Submit Now",null], jumpTo:"redirect" }
+  { q: "Try your luck at a $100 Amazon card", options: [null,"Submit & Try",null], jumpTo:"redirect" }
 ];
 
 var current = 0;
@@ -207,7 +207,7 @@ function render(){
       btn.addEventListener("click",function(){ onChoose(item,index); });
     } else {
       btn.style.visibility="hidden";
-      btn.style.height="48px"; // keep consistent height
+      btn.style.height="48px";
     }
     $options.appendChild(btn);
   });
@@ -230,7 +230,7 @@ function onChoose(item,index){
 function onExpire(){
   $question.innerHTML="This round is closed.<br>Stay tuned for what’s next.";
   $question.style.marginTop = "60px";
-  $question.style.marginBottom = "60px";
+  $question.style.marginBottom = "30px";
   $options.innerHTML="";
 }
 
